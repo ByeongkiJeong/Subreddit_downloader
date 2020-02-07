@@ -46,14 +46,9 @@ if __name__=="__main__":
             sleep(3) # if there is an error, wait 3 second and try again
             continue
         
-        # for next page
-        str_json = response.json()
-        if str_json['data']['after'] == None:
-            break # while loop end condition
-        else:
-            params['after'] = str_json['data']['after']
-
         # get contents
+        str_json = response.json()
+
         for post in str_json['data']['children']:
             df_posts.loc[len(df_posts)] = [
                 post['kind'], post['data']['id'], post['data']['title'], 
@@ -62,7 +57,14 @@ if __name__=="__main__":
                 post['data']['created_utc'], post['data']['num_comments'], 
                 post['data']['url'], "https://www.reddit.com"+post['data']['permalink']
                 ]
+
+        # for next page
+        if str_json['data']['after'] == None:
+            break # while loop end condition
+        else:
+            params['after'] = str_json['data']['after']
         sleep(1) # to prevent the lost connection
+
 
 
     # scraping comments 
