@@ -1,4 +1,3 @@
-import json
 from sys import argv
 from time import sleep, time
 
@@ -18,7 +17,7 @@ def get_pushshift(subreddit_name=None, before=None, after=None, searchType='subm
     url = f'https://api.pushshift.io/reddit/search/{searchType}?sort=desc&size=1500{suffix}'
     #print('loading '+url)
     r = requests.get(url)
-    data = json.loads(r.content)
+    data = r.json()
     if len(data['data']) > 0:
         prev_end_date = data['data'][-1]['created_utc']
     else:
